@@ -1,0 +1,108 @@
+/******
+
+There are 8 prison cells in a row, and each cell is either occupied or vacant.
+
+Each day, whether the cell is occupied or vacant changes according to the following rules:
+
+If a cell has two adjacent neighbors that are both occupied or both vacant, then the cell becomes occupied.
+Otherwise, it becomes vacant.
+(Note that because the prison is a row, the first and the last cells in the row can't have two adjacent neighbors.)
+
+We describe the current state of the prison in the following way: cells[i] == 1 if the i-th cell is occupied, else cells[i] == 0.
+
+Given the initial state of the prison, return the state of the prison after N days (and N such changes described above.)
+
+Example 1:
+
+Input: cells = [0,1,0,1,1,0,0,1], N = 7
+Output: [0,0,1,1,0,0,0,0]
+Explanation: 
+The following table summarizes the state of the prison on each day:
+Day 0: [0, 1, 0, 1, 1, 0, 0, 1]
+Day 1: [0, 1, 1, 0, 0, 0, 0, 0]
+Day 2: [0, 0, 0, 0, 1, 1, 1, 0]
+Day 3: [0, 1, 1, 0, 0, 1, 0, 0]
+Day 4: [0, 0, 0, 0, 0, 1, 0, 0]
+Day 5: [0, 1, 1, 1, 0, 1, 0, 0]
+Day 6: [0, 0, 1, 0, 1, 1, 0, 0]
+Day 7: [0, 0, 1, 1, 0, 0, 0, 0]
+
+******/
+
+class Solution {
+    
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        int[] cells2=null;
+        Boolean res=false;
+        int repeat=1;
+        ArrayList<ArrayList<Integer>> amain = new ArrayList<ArrayList<Integer> >();
+        for(int i=0;i<N;i++){
+            cells2 = new int[8];
+            for(int j=1;j<7;j++){
+                if(cells[j-1]==cells[j+1]){
+                    cells2[j]=1;
+                }
+                else 
+                    cells2[j]=0;
+            }
+            cells2[0]=cells2[7]=0;
+            cells=cells2;
+            
+         System.out.println(Arrays.toString(cells2)+" "+i);//prints the array upto pattern repetition
+            res=Sol.compareArray(amain,cells2);
+           
+            if(res==true){   
+                if(i>1){
+                    repeat=N%(i);
+                    System.out.println(repeat+"abc");
+                    repeat=(repeat+(i-1))%i;
+                     }
+               else repeat=0;     
+                    System.out.println("true"+repeat);//prints the repetition index
+                    break;
+                     }
+            
+              ArrayList<Integer> cellmain = new ArrayList<Integer>(8);
+              for(int k=0;k<cells2.length;k++){
+                cellmain.add(cells2[k]);
+               }
+             amain.add(cellmain); 
+         }
+        
+         if(res){
+           for (int k =0; k < 8; k++) 
+            cells2[k] = amain.get(repeat).get(k);
+            return cells2;
+         }
+         else
+         return cells;
+    }
+}
+
+class Sol{
+    
+ static int num;  
+public static boolean compareArray(ArrayList<ArrayList<Integer>> amain, int[] cells2){
+    num=0;    
+    boolean flag=false;
+     
+       for (int i = 0; i < amain.size(); i++) { 
+           num++; 
+   for(int j=0;j<8;j++){
+ 
+       if(amain.get(i).get(j)==cells2[j]){
+       flag=true;
+   }
+      else {flag=false;
+       break;}
+    }
+           
+       if(flag==true)
+           break;
+       }
+
+     return flag;
+    
+}
+
+}
